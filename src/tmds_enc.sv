@@ -3,21 +3,31 @@ module tmds_enc
   input          clk_i,
   input          rst_i,
   input  [7 : 0] px_data_i,
-  input          px_data_valid_i,
-  input          h_sync_i,
-  input          v_sync_i,
-  output [9 : 0] tmds_data_o,
-  output         tmds_data_valid_o
+  input          px_data_val_i,
+  input          ctl_0_i,
+  input          ctl_1_i,
+  output [9 : 0] tmds_data_o
 );
 
-logic [3 : 0] ones_in_px;
-logic [3 : 0] ones_in_px_comb;
+//      1      |    2       |       3      |   4   |
+//  ones_in_px | q_m        | ones_in_q_m  | q_out |
+//  px_data_d1 | ctl_0_d[1] | zeros_in_q_m |       |
+//  ctl_0_d[0] | ctl_1_d[1] | ctl_0_d[2]   |       |
+//  ctl_1_d[0] | valid_d[1] | ctl_1_d[2]   |       |
+//  valid_d[0] |            | valid_d[2]   |       |
+
+logic [3 : 0] ones_in_px, ones_in_px_comb;
 logic [7 : 0] px_data_d1;
-logic         h_sync_d1, h_sync_d2;
-logic         v_sync_d1, v_sync_d2;
-logic         xor_xnor;
+logic [2 : 0] ctl_0_d;
+logic [2 : 0] ctl_1_d;
+logic [2 : 0] valid_d;
 logic [8 : 0] q_m;
 logic [4 : 0] disp_cnt;
+logic [3 : 0] ones_in_q_m, ones_in_q_m_comb;
+logic [3 : 0] zeros_in_q_m, zeros_in_q_m_comb;
+logic [9 : 0] q_out;
+
+assign tmds_data_o = q_out;
 
 always_ff @( posedge clk_i, posedge rst_i )
   if( rst_i )
@@ -36,27 +46,30 @@ always_ff @( posedge clk_i, posedge rst_i )
   if( rst_i )
     begin
       px_data_d1 <= '0;
-      h_sync_d1  <= '0;
-      h_sync_d2  <= '0;
-      v_sync_d1  <= '0;
-      v_sync_d2  <= '0;
+      ctl_0_d    <= '0;
+      ctl_1_d    <= '0;
+      valid_d    <= '0;
     end
   else
     begin
       px_data_d1 <= px_data_i;
-      h_sync_d1  <= h_sync_i;
-      h_sync_d2  <= h_sync_d1;
-      v_sync_d1  <= v_sync_i;
-      v_sync_d2  <= v_sync_d1;
+      ctl_0_d[0] <= ctl_0_i;
+      ctl_1_d[0] <= ctl_1_i;
+      valid_d[0] <= px_data_val_i;
+      for( int i = 1; i < 3; i++ )
+        begin
+          ctl_0_d[i] <= ctl_0_d[i - 1];
+          ctl_1_d[i] <= ctl_1_d[i - 1];
+          valid_d[i]  <= valid_d[i - 1];
+        end
     end
-
-assign xor_xnor = ( ones_in_px > 4'd4 ) || ( ( ones_in_px == 4'd4 ) && !px_data_d1[0] );
 
 always_ff @( posedge clk_i, posedge rst_i )
   if ( rst_i )
     q_m <= '0;
   else
-    if( xor_xnor )
+    if( ( ones_in_px > 4'd4 ) ||
+        ( ( ones_in_px == 4'd4 ) && !px_data_d1[0] ) )
       begin
         q_m[0] <= px_data_d1[0];
         q_m[8] <= 1'b0;
@@ -71,5 +84,82 @@ always_ff @( posedge clk_i, posedge rst_i )
           q_m[i + 1] <= q_m[i] ^ px_data_d1[i + 1];
       end
 
->>>>>>> 99c0b1408f8abae6b65f261dc3f554387cc22ba2
+always_ff @( posedge clk_i, posedge rst_i )
+  if( rst_i )
+    begin
+      ones_in_q_m  <= '0;
+      zeros_in_q_m <= '0;
+    end
+  else
+    begin
+      ones_in_q_m  <= ones_in_q_m_comb;
+      zeros_in_q_m <= zeros_in_q_m_comb;
+    end
+
+always_comb
+  begin
+    ones_in_q_m_comb = '0;
+    for( int i = 0; i < 8; i++ )
+      ones_in_q_m_comb = ones_in_q_m_comb + q_m[i];
+  end
+
+always_comb
+  begin
+    zeros_in_q_m_comb = '0;
+    for( int i = 0; i < 8; i++ )
+      zeros_in_q_m_comb = zeros_in_q_m_comb + !q_m[i];
+  end
+
+// May be I should add another stage to pipeline to find out
+// zeros - ones and ones - zeros
+always_ff @( posedge clk_i, posedge rst_i )
+  if( rst_i )
+    begin
+      q_out    <= '0;
+      disp_cnt <= '0;
+    end
+  else
+    if( valid_d[2] )
+      if( (  disp_cnt == '0 ) || ( zeros_in_q_m == ones_in_q_m ) )
+        begin
+          q_out[9] <= ~q_m[8];
+          q_out[8] <= q_m[8];
+          if( q_m[8] )
+            begin
+              q_out[7 : 0] <= q_m[7 : 0];
+              disp_cnt     <= disp_cnt + ( ones_in_q_m - zeros_in_q_m );
+            end
+          else
+            begin
+              q_out[7 : 0] <= ~q_m[7 : 0];
+              disp_cnt     <= disp_cnt + ( zeros_in_q_m - ones_in_q_m );
+            end
+        end
+      else
+        if( ( !disp_cnt[4] && ( ones_in_q_m > zeros_in_q_m ) ) ||
+            (  disp_cnt[4] && ( zeros_in_q_m > ones_in_q_m ) ) )
+          begin
+            q_out[9]     <= 1'b1;
+            q_out[8]     <= q_m[8];
+            q_out[7 : 0] <= ~q_m[7 : 0];
+            disp_cnt     <= disp_cnt + { q_m[8], 1'b0 } + ( zeros_in_q_m - ones_in_q_m );
+          end
+        else
+          begin
+            q_out[9]     <= 1'b0;
+            q_out[8]     <= q_m[8];
+            q_out[7 : 0] <= q_m[7 : 0];
+            disp_cnt     <= disp_cnt + { !q_m[8], 1'b0 } + ( ones_in_q_m - zeros_in_q_m );
+          end
+    else
+      begin
+        disp_cnt <= '0;
+        case( { ctl_1_d[2], ctl_0_d[2] } )
+          2'b00: q_out <= 10'b1101010100;
+          2'b01: q_out <= 10'b0010101011;
+          2'b10: q_out <= 10'b0101010100;
+          2'b11: q_out <= 10'b1010101011;
+        endcase
+      end
+
 endmodule
