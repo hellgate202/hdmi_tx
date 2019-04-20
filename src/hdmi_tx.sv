@@ -31,7 +31,7 @@ logic rst_d1;
 logic rst_d2;
 logic px_clk_rst;
 
-always_ff @( posedge px_clk_i, rst_i )
+always_ff @( posedge px_clk_i, posedge rst_i )
   if( rst_i )
     begin
       rst_d1 <= 1'b1;

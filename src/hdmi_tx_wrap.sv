@@ -21,14 +21,14 @@ module hdmi_tx_wrap #(
   output         hdmi_clk_n_o
 );
 
-axi4_lite_if #(
-  .DATA_WIDTH  ( 32       ),
-  .TID_WIDTH   ( 1        ),
-  .TDEST_WIDTH ( 1        ),
-  .TUSER_WIDTH ( 1        )
+axi4_stream_if #(
+  .DATA_WIDTH ( 32       ),
+  .ID_WIDTH   ( 1        ),
+  .DEST_WIDTH ( 1        ),
+  .USER_WIDTH ( 1        )
 ) video_i (
-  .clk_i       ( px_clk_i ),
-  .aresetn     ( !rst_i   )
+  .aclk       ( px_clk_i ),
+  .aresetn    ( !rst_i   )
 );
 
 assign video_i.tdata  = video_i_tdata;

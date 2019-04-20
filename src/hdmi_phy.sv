@@ -34,8 +34,8 @@ OSERDESE2 #(
   .DATA_RATE_TQ   ( "SDR"         ),
   .DATA_WIDTH     ( 10            ),
   .TRISTATE_WIDTH ( 1             ),
-  .TBYTE_CTL      ( 0             ),
-  .TBYTE_SRC      ( 0             ),
+  .TBYTE_CTL      ( "FALSE"       ),
+  .TBYTE_SRC      ( "FALSE"       ),
   .SERDES_MODE    ( "MASTER"      )
 ) red_serdes_master (
   .OFB            (               ),
@@ -72,8 +72,8 @@ OSERDESE2 #(
   .DATA_RATE_TQ   ( "SDR"         ),
   .DATA_WIDTH     ( 10            ),
   .TRISTATE_WIDTH ( 1             ),
-  .TBYTE_CTL      ( 0             ),
-  .TBYTE_SRC      ( 0             ),
+  .TBYTE_CTL      ( "FALSE"       ),
+  .TBYTE_SRC      ( "FALSE"       ),
   .SERDES_MODE    ( "SLAVE"       )
 ) red_serdes_slave (
   .OFB            (               ),
@@ -118,8 +118,8 @@ OSERDESE2 #(
   .DATA_RATE_TQ   ( "SDR"           ),
   .DATA_WIDTH     ( 10              ),
   .TRISTATE_WIDTH ( 1               ),
-  .TBYTE_CTL      ( 0               ),
-  .TBYTE_SRC      ( 0               ),
+  .TBYTE_CTL      ( "FALSE"         ),
+  .TBYTE_SRC      ( "FALSE"         ),
   .SERDES_MODE    ( "MASTER"        )
 ) green_serdes_master (
   .OFB            (                 ),
@@ -156,8 +156,8 @@ OSERDESE2 #(
   .DATA_RATE_TQ   ( "SDR"           ),
   .DATA_WIDTH     ( 10              ),
   .TRISTATE_WIDTH ( 1               ),
-  .TBYTE_CTL      ( 0               ),
-  .TBYTE_SRC      ( 0               ),
+  .TBYTE_CTL      ( "FALSE"         ),
+  .TBYTE_SRC      ( "FALSE"         ),
   .SERDES_MODE    ( "SLAVE"         )
 ) green_serdes_slave (
   .OFB            (                 ),
@@ -202,8 +202,8 @@ OSERDESE2 #(
   .DATA_RATE_TQ   ( "SDR"          ),
   .DATA_WIDTH     ( 10             ),
   .TRISTATE_WIDTH ( 1              ),
-  .TBYTE_CTL      ( 0              ),
-  .TBYTE_SRC      ( 0              ),
+  .TBYTE_CTL      ( "FALSE"        ),
+  .TBYTE_SRC      ( "FALSE"        ),
   .SERDES_MODE    ( "MASTER"       )
 ) blue_serdes_master (
   .OFB            (                ),
@@ -240,8 +240,8 @@ OSERDESE2 #(
   .DATA_RATE_TQ   ( "SDR"          ),
   .DATA_WIDTH     ( 10             ),
   .TRISTATE_WIDTH ( 1              ),
-  .TBYTE_CTL      ( 0              ),
-  .TBYTE_SRC      ( 0              ),
+  .TBYTE_CTL      ( "FALSE"        ),
+  .TBYTE_SRC      ( "FALSE"        ),
   .SERDES_MODE    ( "SLAVE"        )
 ) blue_serdes_slave (
   .OFB            (                ),
@@ -286,8 +286,8 @@ OSERDESE2 #(
   .DATA_RATE_TQ   ( "SDR"       ),
   .DATA_WIDTH     ( 10          ),
   .TRISTATE_WIDTH ( 1           ),
-  .TBYTE_CTL      ( 0           ),
-  .TBYTE_SRC      ( 0           ),
+  .TBYTE_CTL      ( "FALSE"     ),
+  .TBYTE_SRC      ( "FALSE"     ),
   .SERDES_MODE    ( "MASTER"    )
 ) clk_serdes_master (
   .OFB            (             ),
@@ -324,8 +324,8 @@ OSERDESE2 #(
   .DATA_RATE_TQ   ( "SDR"       ),
   .DATA_WIDTH     ( 10          ),
   .TRISTATE_WIDTH ( 1           ),
-  .TBYTE_CTL      ( 0           ),
-  .TBYTE_SRC      ( 0           ),
+  .TBYTE_CTL      ( "FALSE"     ),
+  .TBYTE_SRC      ( "FALSE"     ),
   .SERDES_MODE    ( "SLAVE"     )
 ) clk_serdes_slave (
   .OFB            (             ),
