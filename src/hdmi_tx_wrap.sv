@@ -8,7 +8,7 @@ module hdmi_tx_wrap #(
   input          rst_i,
   input [31 : 0] video_i_tdata,
   input          video_i_tvalid,
-  output         video_i_treaady,
+  output         video_i_tready,
   input          video_i_tuser,
   input          video_i_tlast,
   output         hdmi_tx2_p_o,

@@ -94,7 +94,7 @@ tmds_enc tmds_blue_channel
   .tmds_data_o   ( tmds_blue  )
 );
 
-hdmi_phy hdmi_red_channel
+hdmi_phy phy
 (
   .px_clk_i       ( px_clk_i     ),
   .tmds_clk_i     ( tmds_clk_i   ),

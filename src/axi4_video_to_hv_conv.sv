@@ -69,10 +69,10 @@ always_ff @( posedge clk_i, posedge rst_i )
   else
     if( axi4_video_i.tvalid && axi4_video_i.tlast &&
         ln_cnt == ( Y_RES - 1 ) )
-      v_sync <= 1'b1;
+      v_sync_o <= 1'b1;
     else
       if( axi4_video_i.tvalid && axi4_video_i.tuser )
-        v_sync <= 1'b0;
+        v_sync_o <= 1'b0;
 
 always_ff @( posedge clk_i, posedge rst_i )
   if( rst_i )
