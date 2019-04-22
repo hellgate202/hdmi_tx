@@ -22,6 +22,7 @@ logic [2 : 0] ctl_0_d;
 logic [2 : 0] ctl_1_d;
 logic [2 : 0] valid_d;
 logic [8 : 0] q_m;
+logic [8 : 0] q_m_comb;
 logic [4 : 0] disp_cnt;
 logic [3 : 0] ones_in_q_m, ones_in_q_m_comb;
 logic [3 : 0] zeros_in_q_m, zeros_in_q_m_comb;
@@ -65,23 +66,28 @@ always_ff @( posedge clk_i, posedge rst_i )
     end
 
 always_ff @( posedge clk_i, posedge rst_i )
-  if ( rst_i )
+  if( rst_i )
     q_m <= '0;
   else
+    q_m <= q_m_comb;
+
+always_comb
+  begin
+    q_m_comb = q_m;
     if( ( ones_in_px > 4'd4 ) ||
         ( ( ones_in_px == 4'd4 ) && !px_data_d1[0] ) )
       begin
-        q_m[0] <= px_data_d1[0];
-        q_m[8] <= 1'b0;
+        q_m_comb[0] = px_data_d1[0];
+        q_m_comb[8] = 1'b0;
         for( int i = 0; i < 7; i++ )
-          q_m[i + 1] <= q_m[i] ~^ px_data_d1[i + 1];
+          q_m_comb[i + 1] = q_m_comb[i] ~^ px_data_d1[i + 1];
       end
     else
       begin
-        q_m[0] <= px_data_d1[0];
-        q_m[8] <= 1'b1;
+        q_m_comb[0] = px_data_d1[0];
+        q_m_comb[8] = 1'b1;
         for( int i = 0; i < 7; i++ )
-          q_m[i + 1] <= q_m[i] ^ px_data_d1[i + 1];
+          q_m_comb[i + 1] = q_m_comb[i] ^ px_data_d1[i + 1];
       end
 
 always_ff @( posedge clk_i, posedge rst_i )
