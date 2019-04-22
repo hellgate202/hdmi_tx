@@ -89,6 +89,7 @@ always_comb
         for( int i = 0; i < 7; i++ )
           q_m_comb[i + 1] = q_m_comb[i] ^ px_data_d1[i + 1];
       end
+  end
 
 always_ff @( posedge clk_i, posedge rst_i )
   if( rst_i )
