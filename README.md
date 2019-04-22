@@ -28,4 +28,6 @@ tmds_clk_i was 742.5 MHz
 It is an ok condition that Vivado (2018.3.1) tells that timing requirements wasn't met
 for pulse width of TMDS clk. Because FMAX for BUFG and OSERDESE2 is 600 MHz. Hence, it works. 
 
-Feel free to add false paths to your constraints file for those paths.
+Example project can be found here:
+
+https://github.com/hellgate202/zybo_z7_hdmi_test
