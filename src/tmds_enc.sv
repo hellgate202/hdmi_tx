@@ -134,13 +134,13 @@ always_ff @( posedge clk_i, posedge rst_i )
       disp_cnt <= '0;
     end
   else
-    if( gb_d2[2] )
+    if( gb_d[2] )
       begin
         disp_cnt <= '0;
         case( TMDS_CHANNEL )
-          0: qout <= 10'b1011001100;
-          1: qout <= 10'b0100110011;
-          2: qout <= 10'b1011001100;
+          0: q_out <= 10'b1011001100;
+          1: q_out <= 10'b0100110011;
+          2: q_out <= 10'b1011001100;
           default:;
         endcase
       end

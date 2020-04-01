@@ -1,6 +1,4 @@
 module hdmi_tx_wrap #(
-  parameter int X_RES    = 1920,
-  parameter int Y_RES    = 1080,
   parameter int PX_WIDTH = 10
 )(
   input          px_clk_i,
@@ -22,13 +20,13 @@ module hdmi_tx_wrap #(
 );
 
 axi4_stream_if #(
-  .DATA_WIDTH ( 32       ),
-  .ID_WIDTH   ( 1        ),
-  .DEST_WIDTH ( 1        ),
-  .USER_WIDTH ( 1        )
+  .TDATA_WIDTH ( 32       ),
+  .TID_WIDTH   ( 1        ),
+  .TDEST_WIDTH ( 1        ),
+  .TUSER_WIDTH ( 1        )
 ) video_i (
-  .aclk       ( px_clk_i ),
-  .aresetn    ( !rst_i   )
+  .aclk        ( px_clk_i ),
+  .aresetn     ( !rst_i   )
 );
 
 assign video_i.tdata  = video_i_tdata;
@@ -38,8 +36,6 @@ assign video_i.tlast  = video_i_tlast;
 assign video_i.tuser  = video_i_tuser;
 
 hdmi_tx #(
-  .X_RES        ( X_RES        ),
-  .Y_RES        ( Y_RES        ),
   .PX_WIDTH     ( PX_WIDTH     )
 ) hdmi_tx (
   .px_clk_i     ( px_clk_i     ),
