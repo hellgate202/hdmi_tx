@@ -32,7 +32,6 @@ logic         ctl_1;
 logic         ctl_2;
 logic         ctl_3;
 logic         preamble;
-logic         gb;
 
 always_ff @( posedge px_clk_i, posedge rst_i )
   if( rst_i )
@@ -63,7 +62,6 @@ hdmi_timing_gen #(
   .hsync_o       ( h_sync     ),
   .vsync_o       ( v_sync     ),
   .preamble_o    ( preamble   ),
-  .gb_o          ( gb         ),
   .red_o         ( red        ),
   .green_o       ( green      ),
   .blue_o        ( blue       )
@@ -76,7 +74,6 @@ tmds_enc #(
   .rst_i         ( px_clk_rst ),
   .px_data_i     ( red        ),
   .px_data_val_i ( px_valid   ),
-  .gb_i          ( gb         ),
   .ctl_0_i       ( ctl_2      ),
   .ctl_1_i       ( ctl_3      ),
   .tmds_data_o   ( tmds_red   )
@@ -89,7 +86,6 @@ tmds_enc #(
   .rst_i         ( px_clk_rst ),
   .px_data_i     ( green      ),
   .px_data_val_i ( px_valid   ),
-  .gb_i          ( gb         ),
   .ctl_0_i       ( ctl_0      ),
   .ctl_1_i       ( ctl_1      ),
   .tmds_data_o   ( tmds_green )
@@ -102,7 +98,6 @@ tmds_enc #(
   .rst_i         ( px_clk_rst ),
   .px_data_i     ( blue       ),
   .px_data_val_i ( px_valid   ),
-  .gb_i          ( gb         ),
   .ctl_0_i       ( h_sync     ),
   .ctl_1_i       ( v_sync     ),
   .tmds_data_o   ( tmds_blue  )

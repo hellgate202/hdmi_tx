@@ -10,7 +10,6 @@ module hdmi_timing_gen #(
   output logic         hsync_o,
   output logic         vsync_o,
   output logic         preamble_o,
-  output logic         gb_o,
   output logic [7 : 0] red_o,
   output logic [7 : 0] green_o,
   output logic [7 : 0] blue_o
@@ -109,7 +108,6 @@ always_ff @( posedge clk_i, posedge rst_i )
       vsync_o       <= 1'b0;
       data_enable_o <= 1'b0;
       preamble_o    <= 1'b0;
-      gb_o          <= 1'b0;
     end
   else
     begin
@@ -119,10 +117,7 @@ always_ff @( posedge clk_i, posedge rst_i )
                        px_cnt > PX_CNT_WIDTH'( HSYNC_NEGEDGE_TO_DE_POSEDGE + HSYNC_WIDTH - 1 ) &&
                        px_cnt < PX_CNT_WIDTH'( TOTAL_X - DE_NEGEDGE_TO_HSYNC_POSEDGE );
       preamble_o    <= state == ACTIVE_VIDEO_S && 
-                       px_cnt > PX_CNT_WIDTH'( HSYNC_NEGEDGE_TO_DE_POSEDGE + HSYNC_WIDTH - 11 ) &&
-                       px_cnt < PX_CNT_WIDTH'( HSYNC_NEGEDGE_TO_DE_POSEDGE + HSYNC_WIDTH - 2 );
-      gb_o          <= state == ACTIVE_VIDEO_S && 
-                       px_cnt > PX_CNT_WIDTH'( HSYNC_NEGEDGE_TO_DE_POSEDGE + HSYNC_WIDTH - 3 ) &&
+                       px_cnt > PX_CNT_WIDTH'( HSYNC_NEGEDGE_TO_DE_POSEDGE + HSYNC_WIDTH - 9 ) &&
                        px_cnt < PX_CNT_WIDTH'( HSYNC_NEGEDGE_TO_DE_POSEDGE + HSYNC_WIDTH );
     end
 
