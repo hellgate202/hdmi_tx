@@ -1,0 +1,4 @@
+../lib/axi4_lib/src/interface/axi4_stream_if.sv
+../src/cea861d_1080p30_pkg.sv 
+../src/hdmi_timing_gen.sv
+./tb_hdmi_tx.sv

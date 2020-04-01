@@ -1,13 +1,17 @@
-module tmds_enc
-(
+module tmds_enc #(
+  parameter int TMDS_CHANNEL = 0
+)(
   input          clk_i,
   input          rst_i,
   input  [7 : 0] px_data_i,
   input          px_data_val_i,
+  input          gb_i,
   input          ctl_0_i,
   input          ctl_1_i,
   output [9 : 0] tmds_data_o
 );
+
+// control, lgb, video
 
 //      1      |    2       |       3      |   4   |
 //  ones_in_px | q_m        | ones_in_q_m  | q_out |
@@ -21,6 +25,7 @@ logic [7 : 0] px_data_d1;
 logic [2 : 0] ctl_0_d;
 logic [2 : 0] ctl_1_d;
 logic [2 : 0] valid_d;
+logic [2 : 0] gb_d;
 logic [8 : 0] q_m;
 logic [8 : 0] q_m_comb;
 logic [4 : 0] disp_cnt;
@@ -50,6 +55,7 @@ always_ff @( posedge clk_i, posedge rst_i )
       ctl_0_d    <= '0;
       ctl_1_d    <= '0;
       valid_d    <= '0;
+      gb_d       <= '0;
     end
   else
     begin
@@ -57,11 +63,13 @@ always_ff @( posedge clk_i, posedge rst_i )
       ctl_0_d[0] <= ctl_0_i;
       ctl_1_d[0] <= ctl_1_i;
       valid_d[0] <= px_data_val_i;
+      gb_d[0]    <= gb_i;
       for( int i = 1; i < 3; i++ )
         begin
           ctl_0_d[i] <= ctl_0_d[i - 1];
           ctl_1_d[i] <= ctl_1_d[i - 1];
-          valid_d[i]  <= valid_d[i - 1];
+          valid_d[i] <= valid_d[i - 1];
+          gb_d[i]    <= gb_d[i - 1];
         end
     end
 
@@ -126,47 +134,58 @@ always_ff @( posedge clk_i, posedge rst_i )
       disp_cnt <= '0;
     end
   else
-    if( valid_d[2] )
-      if( (  disp_cnt == '0 ) || ( zeros_in_q_m == ones_in_q_m ) )
-        begin
-          q_out[9] <= ~q_m[8];
-          q_out[8] <= q_m[8];
-          if( q_m[8] )
+    if( gb_d2[2] )
+      begin
+        disp_cnt <= '0;
+        case( TMDS_CHANNEL )
+          0: qout <= 10'b1011001100;
+          1: qout <= 10'b0100110011;
+          2: qout <= 10'b1011001100;
+          default:;
+        endcase
+      end
+    else
+      if( valid_d[2] )
+        if( (  disp_cnt == '0 ) || ( zeros_in_q_m == ones_in_q_m ) )
+          begin
+            q_out[9] <= ~q_m[8];
+            q_out[8] <= q_m[8];
+            if( q_m[8] )
+              begin
+                q_out[7 : 0] <= q_m[7 : 0];
+                disp_cnt     <= disp_cnt + ( ones_in_q_m - zeros_in_q_m );
+              end
+            else
+              begin
+                q_out[7 : 0] <= ~q_m[7 : 0];
+                disp_cnt     <= disp_cnt + ( zeros_in_q_m - ones_in_q_m );
+              end
+          end
+        else
+          if( ( !disp_cnt[4] && ( ones_in_q_m > zeros_in_q_m ) ) ||
+              (  disp_cnt[4] && ( zeros_in_q_m > ones_in_q_m ) ) )
             begin
-              q_out[7 : 0] <= q_m[7 : 0];
-              disp_cnt     <= disp_cnt + ( ones_in_q_m - zeros_in_q_m );
+              q_out[9]     <= 1'b1;
+              q_out[8]     <= q_m[8];
+              q_out[7 : 0] <= ~q_m[7 : 0];
+              disp_cnt     <= disp_cnt + { q_m[8], 1'b0 } + ( zeros_in_q_m - ones_in_q_m );
             end
           else
             begin
-              q_out[7 : 0] <= ~q_m[7 : 0];
-              disp_cnt     <= disp_cnt + ( zeros_in_q_m - ones_in_q_m );
+              q_out[9]     <= 1'b0;
+              q_out[8]     <= q_m[8];
+              q_out[7 : 0] <= q_m[7 : 0];
+              disp_cnt     <= disp_cnt + { !q_m[8], 1'b0 } + ( ones_in_q_m - zeros_in_q_m );
             end
-        end
       else
-        if( ( !disp_cnt[4] && ( ones_in_q_m > zeros_in_q_m ) ) ||
-            (  disp_cnt[4] && ( zeros_in_q_m > ones_in_q_m ) ) )
-          begin
-            q_out[9]     <= 1'b1;
-            q_out[8]     <= q_m[8];
-            q_out[7 : 0] <= ~q_m[7 : 0];
-            disp_cnt     <= disp_cnt + { q_m[8], 1'b0 } + ( zeros_in_q_m - ones_in_q_m );
-          end
-        else
-          begin
-            q_out[9]     <= 1'b0;
-            q_out[8]     <= q_m[8];
-            q_out[7 : 0] <= q_m[7 : 0];
-            disp_cnt     <= disp_cnt + { !q_m[8], 1'b0 } + ( ones_in_q_m - zeros_in_q_m );
-          end
-    else
-      begin
-        disp_cnt <= '0;
-        case( { ctl_1_d[2], ctl_0_d[2] } )
-          2'b00: q_out <= 10'b1101010100;
-          2'b01: q_out <= 10'b0010101011;
-          2'b10: q_out <= 10'b0101010100;
-          2'b11: q_out <= 10'b1010101011;
-        endcase
-      end
+        begin
+          disp_cnt <= '0;
+          case( { ctl_1_d[2], ctl_0_d[2] } )
+            2'b00: q_out <= 10'b1101010100;
+            2'b01: q_out <= 10'b0010101011;
+            2'b10: q_out <= 10'b0101010100;
+            2'b11: q_out <= 10'b1010101011;
+          endcase
+        end
 
 endmodule

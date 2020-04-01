@@ -1,6 +1,4 @@
 module hdmi_tx #(
-  parameter int X_RES    = 1920,
-  parameter int Y_RES    = 1080,
   parameter int PX_WIDTH = 10
 )(
   input                px_clk_i,
@@ -26,10 +24,15 @@ logic         v_sync;
 logic [9 : 0] tmds_red;
 logic [9 : 0] tmds_green;
 logic [9 : 0] tmds_blue;
-
-logic rst_d1;
-logic rst_d2;
-logic px_clk_rst;
+logic         rst_d1;
+logic         rst_d2;
+logic         px_clk_rst;
+logic         ctl_0;
+logic         ctl_1;
+logic         ctl_2;
+logic         ctl_3;
+logic         preamble;
+logic         gb;
 
 always_ff @( posedge px_clk_i, posedge rst_i )
   if( rst_i )
@@ -45,50 +48,61 @@ always_ff @( posedge px_clk_i, posedge rst_i )
 
 assign px_clk_rst = rst_d2;
 
-axi4_video_to_hv_conv #(
-  .X_RES        ( X_RES      ),
-  .Y_RES        ( Y_RES      ),
-  .PX_WIDTH     ( PX_WIDTH   )
-) video_conv (
-  .clk_i        ( px_clk_i   ),
-  .rst_i        ( px_clk_rst ),
-  .axi4_video_i ( video_i    ),
-  .red_o        ( red        ),
-  .green_o      ( green      ),
-  .blue_o       ( blue       ),
-  .px_valid_o   ( px_valid   ),
-  .h_sync_o     ( h_sync     ),
-  .v_sync_o     ( v_sync     )
+assign ctl_0 = preamble ?  1'b1 : 1'b0;
+assign ctl_1 = 1'b0;
+assign ctl_2 = 1'b0;
+assign ctl_3 = 1'b0;
+
+hdmi_timing_gen #(
+  .PX_WIDTH      ( PX_WIDTH   )
+) timing_gen (
+  .clk_i         ( px_clk_i   ),
+  .rst_i         ( px_clk_rst ),
+  .video_i       ( video_i    ),
+  .data_enable_o ( px_valid   ),
+  .hsync_o       ( h_sync     ),
+  .vsync_o       ( v_sync     ),
+  .preamble_o    ( preamble   ),
+  .gb_o          ( gb         ),
+  .red_o         ( red        ),
+  .green_o       ( green      ),
+  .blue_o        ( blue       )
 );
 
-tmds_enc tmds_red_channel
-(
+tmds_enc #( 
+  .TMDS_CHANNEL  ( 2          )
+) tmds_red_channel (
   .clk_i         ( px_clk_i   ),
   .rst_i         ( px_clk_rst ),
   .px_data_i     ( red        ),
   .px_data_val_i ( px_valid   ),
-  .ctl_0_i       ( 1'b0       ),
-  .ctl_1_i       ( 1'b0       ),
+  .gb_i          ( gb         ),
+  .ctl_0_i       ( ctl_2      ),
+  .ctl_1_i       ( ctl_3      ),
   .tmds_data_o   ( tmds_red   )
 );
 
-tmds_enc tmds_green_channel
-(
+tmds_enc #(
+  .TMDS_CHANNEL  ( 1          )
+) tmds_green_channel (
   .clk_i         ( px_clk_i   ),
   .rst_i         ( px_clk_rst ),
   .px_data_i     ( green      ),
   .px_data_val_i ( px_valid   ),
-  .ctl_0_i       ( 1'b0       ),
-  .ctl_1_i       ( 1'b0       ),
+  .gb_i          ( gb         ),
+  .ctl_0_i       ( ctl_0      ),
+  .ctl_1_i       ( ctl_1      ),
   .tmds_data_o   ( tmds_green )
 );
 
-tmds_enc tmds_blue_channel
-(
+tmds_enc #(
+  .TMDS_CHANNEL  ( 0          )
+) tmds_blue_channel (
   .clk_i         ( px_clk_i   ),
   .rst_i         ( px_clk_rst ),
   .px_data_i     ( blue       ),
   .px_data_val_i ( px_valid   ),
+  .gb_i          ( gb         ),
   .ctl_0_i       ( h_sync     ),
   .ctl_1_i       ( v_sync     ),
   .tmds_data_o   ( tmds_blue  )
