@@ -55,7 +55,6 @@ always_ff @( posedge clk_i, posedge rst_i )
       ctl_0_d    <= '0;
       ctl_1_d    <= '0;
       valid_d    <= '0;
-      gb_d       <= '0;
     end
   else
     begin
