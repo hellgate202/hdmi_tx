@@ -126,7 +126,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>a15240ff</spirit:value>
+            <spirit:value>3e59d8d7</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -142,7 +142,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>a15240ff</spirit:value>
+            <spirit:value>3e59d8d7</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -385,16 +385,6 @@
       </spirit:port>
     </spirit:ports>
     <spirit:modelParameters>
-      <spirit:modelParameter xsi:type="spirit:nameValueTypeType" spirit:dataType="int">
-        <spirit:name>X_RES</spirit:name>
-        <spirit:displayName>X Res</spirit:displayName>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.X_RES">1920</spirit:value>
-      </spirit:modelParameter>
-      <spirit:modelParameter spirit:dataType="int">
-        <spirit:name>Y_RES</spirit:name>
-        <spirit:displayName>Y Res</spirit:displayName>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.Y_RES">1080</spirit:value>
-      </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="int">
         <spirit:name>PX_WIDTH</spirit:name>
         <spirit:displayName>Px Width</spirit:displayName>
@@ -405,6 +395,11 @@
   <spirit:fileSets>
     <spirit:fileSet>
       <spirit:name>xilinx_anylanguagesynthesis_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>src/cea861d_1080p30_pkg.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>CHECKSUM_50e89444</spirit:userFileType>
+      </spirit:file>
       <spirit:file>
         <spirit:name>lib/axi4_lib/src/interface/axi4_stream_if.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
@@ -429,17 +424,16 @@
       <spirit:file>
         <spirit:name>src/hdmi_timing_gen.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>src/cea861d_1080p30_pkg.sv</spirit:name>
-        <spirit:fileType>systemVerilogSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_50e89444</spirit:userFileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
+        <spirit:userFileType>CHECKSUM_80f3d620</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
       <spirit:name>xilinx_anylanguagebehavioralsimulation_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>src/cea861d_1080p30_pkg.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+      </spirit:file>
       <spirit:file>
         <spirit:name>lib/axi4_lib/src/interface/axi4_stream_if.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
@@ -464,13 +458,6 @@
         <spirit:name>src/hdmi_timing_gen.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>src/cea861d_1080p30_pkg.sv</spirit:name>
-        <spirit:fileType>systemVerilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -516,8 +503,8 @@
       <xilinx:definitionSource>package_project</xilinx:definitionSource>
       <xilinx:vendorDisplayName>hellgate202</xilinx:vendorDisplayName>
       <xilinx:vendorURL>https://github.com/hellgate202/hdmi_tx</xilinx:vendorURL>
-      <xilinx:coreRevision>3</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2020-04-01T15:34:35Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>5</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2020-04-01T15:47:04Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="ui.data.coregen.dd@294e3ac7_ARCHIVE_LOCATION">/home/liv/fpga/hdmi_tx</xilinx:tag>
         <xilinx:tag xilinx:name="ui.data.coregen.dd@4bff950f_ARCHIVE_LOCATION">/home/liv/fpga/hdmi_tx</xilinx:tag>
@@ -555,12 +542,27 @@
         <xilinx:tag xilinx:name="ui.data.coregen.dd@725161a1_ARCHIVE_LOCATION">/home/liv/fpga/hdmi_tx</xilinx:tag>
         <xilinx:tag xilinx:name="ui.data.coregen.dd@5632d6d7_ARCHIVE_LOCATION">/home/liv/fpga/hdmi_tx</xilinx:tag>
         <xilinx:tag xilinx:name="ui.data.coregen.dd@27c4c714_ARCHIVE_LOCATION">/home/liv/fpga/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@6bd6e00_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@23ddd93_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@399d81e2_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@2f78599_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@5688a5b6_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@78782437_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@5b82f36b_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@3ac60c74_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@95d2add_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@4f4af1_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@74049899_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@32e8f8e3_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@121bda24_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@e30fe40_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@61ff79a6_ARCHIVE_LOCATION">/home/liv/fpga/zybo_z7_hdmi_test/ip/hdmi_tx</xilinx:tag>
       </xilinx:tags>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.3</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="f1f4e102"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="433f0f69"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="e2ae0fab"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="0f061ef4"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="97dee687"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="e414d96a"/>
