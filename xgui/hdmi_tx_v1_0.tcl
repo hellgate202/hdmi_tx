@@ -18,18 +18,6 @@ proc validate_PARAM_VALUE.PX_WIDTH { PARAM_VALUE.PX_WIDTH } {
 }
 
 
-proc update_MODELPARAM_VALUE.X_RES { MODELPARAM_VALUE.X_RES } {
-	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
-	# WARNING: There is no corresponding user parameter named "X_RES". Setting updated value from the model parameter.
-set_property value 1920 ${MODELPARAM_VALUE.X_RES}
-}
-
-proc update_MODELPARAM_VALUE.Y_RES { MODELPARAM_VALUE.Y_RES } {
-	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
-	# WARNING: There is no corresponding user parameter named "Y_RES". Setting updated value from the model parameter.
-set_property value 1080 ${MODELPARAM_VALUE.Y_RES}
-}
-
 proc update_MODELPARAM_VALUE.PX_WIDTH { MODELPARAM_VALUE.PX_WIDTH PARAM_VALUE.PX_WIDTH } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.PX_WIDTH}] ${MODELPARAM_VALUE.PX_WIDTH}
